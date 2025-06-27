@@ -1,7 +1,7 @@
 # 音乐聚类分析
 
 ## 项目简介
-本项目使用 K-Means 聚类算法对尼日利亚音乐数据集进行分析，探索不同类型音乐的特征差异，并使用轮廓系数评估聚类质量。
+使用 K-Means 聚类算法对尼日利亚音乐数据集进行分析，探索不同类型音乐的特征差异，并使用轮廓系数评估聚类质量。
 
 ## 数据集
 数据集包含以下列：
@@ -32,10 +32,104 @@
 - `liveness`
 - `tempo`
 
-## 分析结果
+## 代码分析
 
-### 轮廓系数分析
-整体平均轮廓系数为 **0.2220**，表明聚类效果一般。可以尝试调整聚类数量或选择不同的特征以提高聚类质量。
+### 数据预处理
+```python
+# 读取数据
+data = pd.read_csv('nigerian-songs.csv')
+
+# 选择用于聚类的特征
+features = ['danceability', 'energy', 'loudness', 'acousticness', 'instrumentalness', 'liveness', 'tempo']
+
+# 数据预处理
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(data[features])
+```
+- 使用 `StandardScaler` 对特征数据进行标准化处理，使每个特征具有零均值和单位方差。
+
+### K-Means 聚类
+```python
+# 使用 K-Means 进行聚类
+kmeans = KMeans(n_clusters=3, random_state=42)
+kmeans.fit(scaled_features)
+data['cluster'] = kmeans.labels_
+```
+- 使用 K-Means 算法对数据进行聚类，设置聚类数量为 3。
+- 将聚类结果存储在数据框的 `cluster` 列中。
+
+### 轮廓系数计算
+```python
+# 计算轮廓系数
+silhouette_avg = silhouette_score(scaled_features, kmeans.labels_)
+print(f"平均轮廓系数: {silhouette_avg:.4f}")
+```
+- 使用 `silhouette_score` 计算聚类的轮廓系数，评估聚类效果。
+
+### 可视化
+```python
+# 设置中文字体
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 可视化聚类结果
+plt.figure(figsize=(10, 7))
+scatter = plt.scatter(data['acousticness'], data['energy'], c=data['cluster'], cmap='viridis', alpha=0.6)
+plt.colorbar(scatter)
+plt.xlabel('原声性')
+plt.ylabel('能量')
+plt.title('音乐聚类结果')
+plt.savefig('images/音乐聚类结果.png')
+plt.show()
+```
+- 设置中文字体以支持中文显示。
+- 绘制散点图展示聚类结果，使用 `acousticness` 和 `energy` 作为坐标轴。
+
+### 特征分布箱型图
+```python
+# 绘制箱型图（特征分布）
+for feature in features:
+    plt.figure(figsize=(10, 7))
+    sns.boxplot(x='cluster', y=feature, data=data)
+    plt.title(f'{feature} 在不同聚类中的分布')
+    plt.xlabel('聚类')
+    plt.ylabel(feature)
+    plt.savefig(f'images/{feature}_箱型图.png')
+    plt.show()
+```
+- 为每个特征绘制箱型图，展示其在不同聚类中的分布情况。
+
+### 聚类中心图
+```python
+# 绘制聚类中心
+cluster_centers = scaler.inverse_transform(kmeans.cluster_centers_)
+cluster_centers_df = pd.DataFrame(cluster_centers, columns=features)
+
+for feature in features:
+    plt.figure(figsize=(10, 7))
+    sns.barplot(x=np.arange(3), y=cluster_centers_df[feature], palette='viridis')
+    plt.title(f'{feature} 聚类中心')
+    plt.xlabel('聚类')
+    plt.ylabel(feature)
+    plt.xticks(np.arange(3), labels=['聚类 0', '聚类 1', '聚类 2'])
+    plt.savefig(f'images/{feature}_聚类中心.png')
+    plt.show()
+```
+- 计算并绘制每个特征的聚类中心值，使用柱状图展示。
+
+### 特征相关性热图
+```python
+# 绘制相关性热图
+plt.figure(figsize=(12, 8))
+corr = data[features + ['cluster']].corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm')
+plt.title('特征相关性热图')
+plt.savefig('images/特征相关性热图.png')
+plt.show()
+```
+- 计算特征之间的相关性，并使用热图可视化。
+
+## 分析结果
 
 ### 聚类结果可视化
 
@@ -119,3 +213,6 @@
 3. **聚类 2**：
    - **特征描述**：能量和舞蹈性适中，原声性和器乐性较高，响度最低。
    - **样本歌曲**：`luv in a mosh` by Odunsi (The Engine), `City on Lights!` by AYLØ.
+
+#### 轮廓系数结果
+- 平均轮廓系数为 **0.2220**，表明聚类效果一般。可以尝试调整聚类数量或选择不同的特征以提高聚类质量。
