@@ -1,0 +1,37 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
+edge [fontname="helvetica"] ;
+0 [label=<Variety_MINIATURE &le; 0.5<br/>squared_error = 7702.0<br/>samples = 100.0%<br/>value = 126.95>, fillcolor="#f7dac6"] ;
+1 [label=<Package_1 1/9 bushel cartons &le; 0.5<br/>squared_error = 5964.77<br/>samples = 80.8%<br/>value = 150.6>, fillcolor="#f6d3b9"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+2 [label=<Package_35 lb cartons &le; 0.5<br/>squared_error = 4956.47<br/>samples = 74.6%<br/>value = 160.81>, fillcolor="#f5cfb4"] ;
+1 -> 2 ;
+3 [label=<Package_1 1/9 bushel crates &le; 0.5<br/>squared_error = 4486.67<br/>samples = 72.5%<br/>value = 165.53>, fillcolor="#f5ceb2"] ;
+2 -> 3 ;
+4 [label="(...)", fillcolor="#C0C0C0"] ;
+3 -> 4 ;
+57 [label="(...)", fillcolor="#C0C0C0"] ;
+3 -> 57 ;
+58 [label=<squared_error = 10.21<br/>samples = 2.1%<br/>value = 28.61>, fillcolor="#fefbf8"] ;
+2 -> 58 ;
+59 [label=<Variety_PIE TYPE &le; 0.5<br/>squared_error = 6.23<br/>samples = 6.2%<br/>value = 17.35>, fillcolor="#fffefe"] ;
+1 -> 59 ;
+60 [label=<squared_error = 0.0<br/>samples = 0.1%<br/>value = 20.0>, fillcolor="#fffefd"] ;
+59 -> 60 ;
+61 [label=<squared_error = 6.15<br/>samples = 6.1%<br/>value = 17.17>, fillcolor="#fffefe"] ;
+59 -> 61 ;
+62 [label=<Package_36 inch bins &le; 0.5<br/>squared_error = 3460.73<br/>samples = 19.2%<br/>value = 32.33>, fillcolor="#fef9f6"] ;
+0 -> 62 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+63 [label=<Package_24 inch bins &le; 0.5<br/>squared_error = 1104.8<br/>samples = 18.8%<br/>value = 22.44>, fillcolor="#fffdfb"] ;
+62 -> 63 ;
+64 [label=<Package_bushel baskets &le; 0.5<br/>squared_error = 41.31<br/>samples = 18.6%<br/>value = 19.63>, fillcolor="#fffefd"] ;
+63 -> 64 ;
+65 [label="(...)", fillcolor="#C0C0C0"] ;
+64 -> 65 ;
+76 [label="(...)", fillcolor="#C0C0C0"] ;
+64 -> 76 ;
+77 [label=<squared_error = 0.0<br/>samples = 0.1%<br/>value = 400.0>, fillcolor="#e58139"] ;
+63 -> 77 ;
+78 [label=<squared_error = 0.0<br/>samples = 0.4%<br/>value = 275.0>, fillcolor="#edaa79"] ;
+62 -> 78 ;
+}
