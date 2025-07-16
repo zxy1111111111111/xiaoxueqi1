@@ -5,7 +5,7 @@ from scripts.io import load_pumpkin_data
 from scripts.data_analysis import clean_data
 from scripts.feature_processing import get_feature
 from scripts.configuration import conf
-from scripts.evaluate import evaluate_rf, evaluate_lr
+from scripts.evaluate import evaluate_rf, evaluate_lr, evaluate_lgbm, evaluate_xgb
 from scripts.model import build_model
 
 warnings.filterwarnings("ignore")
@@ -23,6 +23,14 @@ def main():
     # 线性回归
     lr_model = build_model("LinearRegression", conf["LinearRegression"]["params"])
     evaluate_lr(lr_model, X_feat, y_feat)
+
+    # LGBM
+    lgb_model = build_model("LGBMRegressor", conf["LGBM"]["params"])
+    evaluate_lgbm(lgb_model, X_feat, y_feat)
+
+    # XGBoost
+    xgb_model = build_model("XGBRegressor", conf["XGBoost"]["params"])
+    evaluate_xgb(xgb_model, X_feat, y_feat)
 
 if __name__ == '__main__':
     main()

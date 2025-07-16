@@ -73,3 +73,15 @@ def evaluate_lr(model, X, y):
     new = new.reindex(columns=X.columns, fill_value=0)
     pred = model.predict(new)[0]
     print(f"[LinearRegression] 示例预测价格: ${pred:.2f}")
+
+def evaluate_lgbm(model, X, y):
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    mse, r2, y_pred = get_regression_model_performance(model, X_train, X_test, y_train, y_test)
+    print(f"[LGBM] MSE: {mse:.2f}, R²: {r2:.2f}")
+
+def evaluate_xgb(model, X, y):
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    mse, r2, y_pred = get_regression_model_performance(model, X_train, X_test, y_train, y_test)
+    print(f"[XGBoost] MSE: {mse:.2f}, R²: {r2:.2f}")
