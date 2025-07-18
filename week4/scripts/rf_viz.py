@@ -1,4 +1,4 @@
-# scripts/rf_viz.py
+# 随机森林、树
 import tempfile
 import shutil
 from pathlib import Path
@@ -7,7 +7,6 @@ import graphviz
 
 
 def visualize_rf_tree(model, X, tree_idx: int = 0, max_depth: int = 3):
-    """随机森林第 tree_idx 棵树可视化（跨盘符安全版）"""
     estimator = model.estimators_[tree_idx]
     dot_data = export_graphviz(
         estimator,
@@ -34,8 +33,7 @@ def visualize_rf_tree(model, X, tree_idx: int = 0, max_depth: int = 3):
             )
             src = Path(tmp) / f"rf_tree_{tree_idx}.{fmt}"
             dst = save_dir / f"rf_tree_{tree_idx}.{fmt}"
-            # 跨盘符安全复制
             shutil.copy2(src, dst)
-            src.unlink(missing_ok=True)  # 删除临时文件
+            src.unlink(missing_ok=True)
 
     print(f"[RandomForest] 第 {tree_idx} 棵树已保存到 {save_dir}/rf_tree_{tree_idx}.png/.pdf")
